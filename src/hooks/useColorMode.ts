@@ -12,26 +12,16 @@ export function useColorMode() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
-  const handleSystemThemeChange = useCallback((e: MediaQueryListEvent) => {
-    if (!storedMode) {
-      setMode(e.matches ? 'dark' : 'light');
-    }
-  }, [storedMode]);
+  const toggleColorMode = useCallback(() => {
+    const newMode = mode === 'light' ? 'dark' : 'light';
+    setMode(newMode);
+    setStoredMode(newMode);
+  }, [mode, setStoredMode]);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', handleSystemThemeChange);
-    
-    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
-  }, [handleSystemThemeChange]);
-
-  const toggleColorMode = useCallback(() => {
-    setMode((prevMode) => {
-      const newMode = prevMode === 'light' ? 'dark' : 'light';
-      setStoredMode(newMode);
-      return newMode;
-    });
-  }, [setStoredMode]);
+    // Apply the theme class to the root element
+    document.documentElement.classList.toggle('dark', mode === 'dark');
+  }, [mode]);
 
   return { mode, toggleColorMode };
 }
