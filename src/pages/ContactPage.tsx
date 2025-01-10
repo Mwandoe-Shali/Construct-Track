@@ -31,15 +31,15 @@ export default function ContactPage() {
           <div className="space-y-4 mt-8">
             <div className="flex items-center space-x-3">
               <Mail className="text-blue-600" />
-              <Typography>support@construction-inventory.com</Typography>
+              <Typography>support@construct-track.com</Typography>
             </div>
             <div className="flex items-center space-x-3">
               <Phone className="text-blue-600" />
-              <Typography>+1 (555) 123-4567</Typography>
+              <Typography>(+254) 790 727 652</Typography>
             </div>
             <div className="flex items-center space-x-3">
               <MapPin className="text-blue-600" />
-              <Typography>123 Construction Ave, Building City, BC 12345</Typography>
+              <Typography>4th Floor GTC Building, Nairobi, Kenya</Typography>
             </div>
           </div>
         </div>

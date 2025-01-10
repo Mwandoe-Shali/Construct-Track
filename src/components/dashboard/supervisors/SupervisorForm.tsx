@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   DialogTitle,
   DialogContent,
@@ -10,6 +10,7 @@ import {
   CircularProgress
 } from '@mui/material';
 import { supervisorService } from '../../../services/supervisor/supervisorService';
+import { checkDatabaseSetup } from '../../../utils/dbCheck';
 
 interface SupervisorFormProps {
   onClose: () => void;
@@ -20,6 +21,11 @@ export default function SupervisorForm({ onClose, onSuccess }: SupervisorFormPro
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Check database setup when component mounts
+    checkDatabaseSetup().catch(console.error);
+  }, []);
 
   const validateEmail = (email: string) => {
     if (!email) return 'Email is required';
@@ -40,7 +46,9 @@ export default function SupervisorForm({ onClose, onSuccess }: SupervisorFormPro
 
     setLoading(true);
     try {
+      console.log('Attempting to create supervisor with email:', email);
       await supervisorService.createSupervisor(email);
+      console.log('Supervisor creation successful');
       onSuccess();
       onClose();
     } catch (err) {

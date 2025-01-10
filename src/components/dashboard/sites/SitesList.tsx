@@ -22,12 +22,14 @@ interface SitesListProps {
 
 export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListProps) {
   const [sites, setSites] = useState<Site[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newSite, setNewSite] = useState({
     name: '',
     location: '',
     building_type: '',
-    size: 0
+    size: ''
   });
 
   useEffect(() => {
@@ -35,31 +37,58 @@ export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListPro
   }, []);
 
   const loadSites = async () => {
-    const { data } = await supabase
-      .from('sites')
-      .select('*')
-      .order('name');
-    
-    if (data) {
-      setSites(data);
-      if (data.length > 0 && !selectedSiteId) {
-        onSiteSelect(data[0]);
+    setLoading(true);
+    setError(null);
+    try {
+      console.log('Fetching sites...');
+      const { data, error } = await supabase
+        .from('sites')
+        .select('id, name, location, building_type, size')
+        .order('name');
+      
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
       }
+      
+      console.log('Sites data:', data);
+      if (data) {
+        setSites(data);
+        if (data.length > 0 && !selectedSiteId) {
+          onSiteSelect(data[0]);
+        }
+      }
+    } catch (err) {
+      console.error('Error loading sites:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load sites');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleAddSite = async () => {
-    const { data } = await supabase
-      .from('sites')
-      .insert([newSite])
-      .select()
-      .single();
+    try {
+      setError(null);
+      const { data, error } = await supabase
+        .from('sites')
+        .insert([{
+          ...newSite,
+          size: newSite.size.toString()
+        }])
+        .select()
+        .single();
 
-    if (data) {
-      setSites([...sites, data]);
-      onSiteSelect(data);
-      setIsAddDialogOpen(false);
-      setNewSite({ name: '', location: '', building_type: '', size: 0 });
+      if (error) throw error;
+
+      if (data) {
+        setSites([...sites, data]);
+        onSiteSelect(data);
+        setIsAddDialogOpen(false);
+        setNewSite({ name: '', location: '', building_type: '', size: '' });
+      }
+    } catch (err) {
+      console.error('Error adding site:', err);
+      setError(err instanceof Error ? err.message : 'Failed to add site');
     }
   };
 
@@ -75,21 +104,31 @@ export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListPro
         </Button>
       </div>
 
-      <List>
-        {sites.map((site) => (
-          <ListItem key={site.id} disablePadding>
-            <ListItemButton
-              selected={site.id === selectedSiteId}
-              onClick={() => onSiteSelect(site)}
-            >
-              <ListItemText 
-                primary={site.name}
-                secondary={site.location}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      {error && (
+        <div className="text-red-500 mb-4">
+          Error: {error}
+        </div>
+      )}
+
+      {loading ? (
+        <div>Loading sites...</div>
+      ) : (
+        <List>
+          {sites.map((site) => (
+            <ListItem key={site.id} disablePadding>
+              <ListItemButton
+                selected={site.id === selectedSiteId}
+                onClick={() => onSiteSelect(site)}
+              >
+                <ListItemText 
+                  primary={site.name}
+                  secondary={site.location}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      )}
 
       <Dialog open={isAddDialogOpen} onClose={() => setIsAddDialogOpen(false)}>
         <DialogTitle>Add New Site</DialogTitle>
@@ -118,7 +157,7 @@ export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListPro
               type="number"
               label="Size (sq ft)"
               value={newSite.size}
-              onChange={(e) => setNewSite({ ...newSite, size: Number(e.target.value) })}
+              onChange={(e) => setNewSite({ ...newSite, size: e.target.value })}
             />
           </div>
         </DialogContent>

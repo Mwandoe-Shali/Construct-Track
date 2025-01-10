@@ -12,10 +12,12 @@ export class SupervisorError extends Error {
 export const supervisorService = {
   async createSupervisor(email: string): Promise<User> {
     try {
+      console.log('Starting supervisor creation for:', email);
+      
       // Generate a secure temporary password
       const tempPassword = generateSecurePassword();
       
-      // Use standard signup flow
+      // Use standard signup flow with detailed error logging
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email,
         password: tempPassword,
@@ -28,12 +30,16 @@ export const supervisorService = {
       });
 
       if (signUpError) {
-        throw new SupervisorError(signUpError.message);
+        console.error('Auth signup error:', signUpError);
+        throw new SupervisorError(`Auth signup failed: ${signUpError.message}`);
       }
 
       if (!authData.user) {
-        throw new SupervisorError('Failed to create supervisor account');
+        console.error('No user data returned from auth signup');
+        throw new SupervisorError('Failed to create supervisor account - no user data returned');
       }
+
+      console.log('Auth user created successfully:', authData.user.id);
 
       // Profile will be created automatically by the database trigger
       const { data: profile, error: profileError } = await supabase
@@ -43,15 +49,37 @@ export const supervisorService = {
         .single();
 
       if (profileError) {
-        throw new SupervisorError('Failed to retrieve supervisor profile');
+        console.error('Profile retrieval error:', profileError);
+        
+        // Check if profile exists despite error
+        const { count, error: countError } = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true })
+          .eq('id', authData.user.id);
+          
+        if (countError) {
+          console.error('Profile count check error:', countError);
+        } else {
+          console.log('Profile exists check:', count > 0);
+        }
+        
+        throw new SupervisorError(`Failed to retrieve supervisor profile: ${profileError.message}`);
       }
 
+      if (!profile) {
+        console.error('No profile data returned');
+        throw new SupervisorError('Failed to create supervisor profile - no profile data returned');
+      }
+
+      console.log('Supervisor creation completed successfully');
+      
       return {
         id: profile.id,
         email: profile.email,
         role: 'supervisor'
       };
     } catch (error) {
+      console.error('Supervisor creation failed:', error);
       if (error instanceof SupervisorError) {
         throw error;
       }
