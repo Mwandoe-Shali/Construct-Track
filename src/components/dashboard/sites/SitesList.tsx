@@ -9,18 +9,20 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField
+  TextField,
+  IconButton,
 } from '@mui/material';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
 import { Site } from '../../../types';
 
 interface SitesListProps {
-  onSiteSelect: (site: Site) => void;
+  onSiteSelect: (site: Site | null) => void;
   selectedSiteId?: string;
+  isManager?: boolean;
 }
 
-export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListProps) {
+export default function SitesList({ onSiteSelect, selectedSiteId, isManager = true }: SitesListProps) {
   const [sites, setSites] = useState<Site[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,28 +36,43 @@ export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListPro
 
   useEffect(() => {
     loadSites();
+    
+    // Subscribe to real-time changes
+    const subscription = supabase
+      .channel('sites_channel')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'sites' 
+        }, 
+        (payload) => {
+          console.log('Real-time update:', payload);
+          loadSites(); // Reload sites when changes occur
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const loadSites = async () => {
     setLoading(true);
     setError(null);
     try {
-      console.log('Fetching sites...');
       const { data, error } = await supabase
         .from('sites')
-        .select('id, name, location, building_type, size')
+        .select('*')
         .order('name');
       
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
+      if (error) throw error;
       
-      console.log('Sites data:', data);
       if (data) {
-        setSites(data);
+        setSites(data as Site[]);
         if (data.length > 0 && !selectedSiteId) {
-          onSiteSelect(data[0]);
+          onSiteSelect(data[0] as Site);
         }
       }
     } catch (err) {
@@ -73,7 +90,7 @@ export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListPro
         .from('sites')
         .insert([{
           ...newSite,
-          size: newSite.size.toString()
+          size: Number(newSite.size)
         }])
         .select()
         .single();
@@ -81,8 +98,9 @@ export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListPro
       if (error) throw error;
 
       if (data) {
-        setSites([...sites, data]);
-        onSiteSelect(data);
+        const newSiteData = data as Site;
+        setSites([...sites, newSiteData]);
+        onSiteSelect(newSiteData);
         setIsAddDialogOpen(false);
         setNewSite({ name: '', location: '', building_type: '', size: '' });
       }
@@ -92,16 +110,50 @@ export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListPro
     }
   };
 
+  const handleDeleteSite = async (siteId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    try {
+      setError(null);
+      const { error } = await supabase
+        .from('sites')
+        .delete()
+        .eq('id', siteId);
+
+      if (error) throw error;
+
+      // Update local state
+      const updatedSites = sites.filter(site => site.id !== siteId);
+      setSites(updatedSites);
+      
+      // Handle selected site update
+      if (selectedSiteId === siteId) {
+        if (updatedSites.length > 0) {
+          onSiteSelect(updatedSites[0]);
+        } else {
+          onSiteSelect(null);
+        }
+      }
+      
+      // Force reload to ensure consistency
+      loadSites();
+    } catch (err) {
+      console.error('Error deleting site:', err);
+      setError(err instanceof Error ? err.message : 'Failed to delete site');
+    }
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Sites</h2>
-        <Button
-          startIcon={<Plus size={20} />}
-          onClick={() => setIsAddDialogOpen(true)}
-        >
-          Add Site
-        </Button>
+        {isManager && (
+          <Button
+            startIcon={<Plus size={20} />}
+            onClick={() => setIsAddDialogOpen(true)}
+          >
+            Add Site
+          </Button>
+        )}
       </div>
 
       {error && (
@@ -115,7 +167,23 @@ export default function SitesList({ onSiteSelect, selectedSiteId }: SitesListPro
       ) : (
         <List>
           {sites.map((site) => (
-            <ListItem key={site.id} disablePadding>
+            <ListItem 
+              key={site.id} 
+              disablePadding
+              secondaryAction={
+                isManager && (
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={(e) => handleDeleteSite(site.id, e)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Trash2 size={16} />
+                  </IconButton>
+                )
+              }
+              className="group"
+            >
               <ListItemButton
                 selected={site.id === selectedSiteId}
                 onClick={() => onSiteSelect(site)}
