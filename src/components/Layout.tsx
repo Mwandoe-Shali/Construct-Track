@@ -23,7 +23,13 @@ export default function Layout({ children }: LayoutProps) {
 
   const getDashboardLabel = () => {
     if (!user) return 'Dashboard';
-    return `${user.role.charAt(0).toUpperCase() + user.role.slice(1)} Dashboard`;
+    
+    // Extract name from email (e.g., manuel+manager@gmail.com -> Manuel)
+    const emailParts = user.email.split('@')[0].split('+')[0].split('.');
+    const name = emailParts[0];
+    const formattedName = name.charAt(0).toUpperCase() + name.slice(1);
+    
+    return `${user.role.charAt(0).toUpperCase() + user.role.slice(1)} ${formattedName}`;
   };
 
   return (
