@@ -33,10 +33,17 @@ export function createAppTheme(mode: 'light' | 'dark'): Theme {
           }),
     },
     components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out',
+          },
+        },
+      },
       MuiPaper: {
         styleOverrides: {
           root: {
-            transition: 'background-color 0.3s ease-in-out',
+            transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
           },
         },
       },
@@ -44,6 +51,21 @@ export function createAppTheme(mode: 'light' | 'dark'): Theme {
         styleOverrides: {
           root: {
             backgroundColor: mode === 'light' ? colors.sepia[700] : colors.dark.paper,
+            transition: 'background-color 0.2s ease-in-out',
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out',
+          },
+        },
+      },
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out',
           },
         },
       },
