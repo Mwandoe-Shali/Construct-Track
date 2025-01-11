@@ -52,6 +52,13 @@ export default function AssignSupervisorDialog({
     if (!selectedSupervisor) return;
 
     try {
+      // Check if the assignment already exists
+      const { data: existingAssignment } = await siteAssignmentService.checkAssignment(siteId, selectedSupervisor);
+      if (existingAssignment && existingAssignment.length > 0) {
+        setError('This supervisor is already assigned to the site.');
+        return;
+      }
+
       const success = await siteAssignmentService.assignSupervisor(
         siteId,
         selectedSupervisor
