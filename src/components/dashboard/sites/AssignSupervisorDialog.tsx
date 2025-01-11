@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,11 +9,11 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Alert,
+  Alert
 } from '@mui/material';
-import { profileService } from '../../../services/profileService';
+import { useQuery } from '@tanstack/react-query';
 import { siteAssignmentService } from '../../../services/siteAssignmentService';
-import type { User } from '../../../types';
+import { userService } from '../../../services/userService';
 
 interface AssignSupervisorDialogProps {
   open: boolean;
@@ -22,61 +22,55 @@ interface AssignSupervisorDialogProps {
   onAssign: () => void;
 }
 
-export default function AssignSupervisorDialog({
+export function AssignSupervisorDialog({
   open,
   onClose,
   siteId,
-  onAssign,
+  onAssign
 }: AssignSupervisorDialogProps) {
-  const [supervisors, setSupervisors] = useState<User[]>([]);
-  const [selectedSupervisor, setSelectedSupervisor] = useState<string>('');
+  const [selectedSupervisor, setSelectedSupervisor] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const loadSupervisors = async () => {
-      try {
-        const data = await profileService.getSupervisors();
-        setSupervisors(data);
-      } catch (err) {
-        setError('Failed to load supervisors');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadSupervisors();
-  }, []);
+  const { data: supervisors } = useQuery(['supervisors'], () =>
+    userService.getSupervisors()
+  );
 
   const handleAssign = async () => {
-    if (!selectedSupervisor) return;
+    if (!selectedSupervisor) {
+      setError('Please select a supervisor');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
 
     try {
       // Check if the assignment already exists
       const { data: existingAssignment } = await siteAssignmentService.checkAssignment(siteId, selectedSupervisor);
       if (existingAssignment && existingAssignment.length > 0) {
-        setError('This supervisor is already assigned to the site.');
+        setError('This supervisor is already assigned to this site.');
         return;
       }
 
-      const success = await siteAssignmentService.assignSupervisor(
-        siteId,
-        selectedSupervisor
-      );
-
+      const success = await siteAssignmentService.assignSupervisor(siteId, selectedSupervisor);
+      
       if (success) {
         onAssign();
         onClose();
       } else {
-        setError('Failed to assign supervisor');
+        setError('Failed to assign supervisor. Please try again.');
       }
     } catch (err) {
-      setError('An error occurred while assigning supervisor');
+      console.error('Error assigning supervisor:', err);
+      setError('An error occurred while assigning the supervisor.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Assign Supervisor</DialogTitle>
       <DialogContent>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -86,11 +80,10 @@ export default function AssignSupervisorDialog({
             value={selectedSupervisor}
             onChange={(e) => setSelectedSupervisor(e.target.value)}
             label="Select Supervisor"
-            disabled={loading}
           >
-            {supervisors.map((supervisor) => (
+            {supervisors?.map((supervisor) => (
               <MenuItem key={supervisor.id} value={supervisor.id}>
-                {supervisor.email}
+                {supervisor.full_name || supervisor.email}
               </MenuItem>
             ))}
           </Select>
@@ -101,9 +94,9 @@ export default function AssignSupervisorDialog({
         <Button
           onClick={handleAssign}
           variant="contained"
-          disabled={!selectedSupervisor || loading}
+          disabled={loading || !selectedSupervisor}
         >
-          Assign
+          {loading ? 'Assigning...' : 'Assign'}
         </Button>
       </DialogActions>
     </Dialog>

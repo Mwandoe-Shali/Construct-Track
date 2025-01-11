@@ -114,6 +114,16 @@ export default function SitesList({ onSiteSelect, selectedSiteId, isManager = tr
     event.stopPropagation();
     try {
       setError(null);
+
+      // First, remove any supervisor assignments for this site
+      const { error: assignmentError } = await supabase
+        .from('site_supervisors')
+        .delete()
+        .eq('site_id', siteId);
+
+      if (assignmentError) throw assignmentError;
+
+      // Then delete the site itself
       const { error } = await supabase
         .from('sites')
         .delete()

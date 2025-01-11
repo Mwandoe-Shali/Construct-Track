@@ -1,29 +1,77 @@
 import { supabase } from '../lib/supabase';
 
 export const siteAssignmentService = {
-  async assignSupervisor(siteId: string, supervisorId: string): Promise<boolean> {
-    const { error } = await supabase
+  async checkAssignment(siteId: string, supervisorId: string) {
+    return await supabase
       .from('site_supervisors')
-      .insert([{ site_id: siteId, user_id: supervisorId }]);
-
-    return !error;
+      .select('*')
+      .eq('site_id', siteId)
+      .eq('user_id', supervisorId);
   },
 
-  async getSiteSupervisor(siteId: string) {
-    const { data } = await supabase
+  async assignSupervisor(siteId: string, supervisorId: string) {
+    try {
+      // First, check if the supervisor is already assigned to any site
+      const { data: existingAssignments } = await supabase
+        .from('site_supervisors')
+        .select('*')
+        .eq('user_id', supervisorId);
+
+      // If supervisor is already assigned somewhere, remove that assignment
+      if (existingAssignments && existingAssignments.length > 0) {
+        const { error: deleteError } = await supabase
+          .from('site_supervisors')
+          .delete()
+          .eq('user_id', supervisorId);
+
+        if (deleteError) throw deleteError;
+      }
+
+      // Create new assignment
+      const { error } = await supabase
+        .from('site_supervisors')
+        .insert([
+          {
+            site_id: siteId,
+            user_id: supervisorId
+          }
+        ]);
+
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('Error assigning supervisor:', error);
+      return false;
+    }
+  },
+
+  async unassignSupervisor(supervisorId: string) {
+    try {
+      const { error } = await supabase
+        .from('site_supervisors')
+        .delete()
+        .eq('user_id', supervisorId);
+
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('Error unassigning supervisor:', error);
+      return false;
+    }
+  },
+
+  async getSupervisorAssignment(supervisorId: string) {
+    const { data, error } = await supabase
       .from('site_supervisors')
-      .select('user_id')
-      .eq('site_id', siteId)
+      .select('site_id')
+      .eq('user_id', supervisorId)
       .single();
 
-    if (!data) return null;
+    if (error) {
+      console.error('Error getting supervisor assignment:', error);
+      return null;
+    }
 
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', data.user_id)
-      .single();
-
-    return profile;
+    return data?.site_id;
   }
 };
