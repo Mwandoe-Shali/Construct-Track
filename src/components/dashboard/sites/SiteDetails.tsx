@@ -48,8 +48,9 @@ export default function SiteDetails({ site, onSiteUpdate, isManager }: SiteDetai
         console.error('Error fetching assigned supervisor:', error);
         setAssignedSupervisor(null);
       } else if (data) {
-        const fullName = data.users?.profiles?.[0]?.full_name;
-        const email = data.users?.email;
+        const user = data.users?.[0];
+        const fullName = user?.profiles?.[0]?.full_name;
+        const email = user?.email;
         setAssignedSupervisor(fullName || email || 'Unknown');
       }
     };
