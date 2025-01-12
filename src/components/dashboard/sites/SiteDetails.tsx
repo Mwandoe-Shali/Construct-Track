@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Paper,
   Typography,
@@ -26,6 +26,26 @@ export default function SiteDetails({ site, onSiteUpdate, isManager }: SiteDetai
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const [editedSite, setEditedSite] = useState(site);
+  const [assignedSupervisor, setAssignedSupervisor] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAssignedSupervisor = async () => {
+      const { data, error } = await supabase
+        .from('site_supervisors')
+        .select('profiles(full_name, email)')
+        .eq('site_id', site.id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching assigned supervisor:', error);
+        setAssignedSupervisor(null);
+      } else if (data) {
+        setAssignedSupervisor(data.profiles.full_name || data.profiles.email);
+      }
+    };
+
+    fetchAssignedSupervisor();
+  }, [site.id]);
 
   const handleUpdateSite = async () => {
     const { data } = await supabase
@@ -53,6 +73,9 @@ export default function SiteDetails({ site, onSiteUpdate, isManager }: SiteDetai
               <Typography><strong>Location:</strong> {site.location}</Typography>
               <Typography><strong>Building Type:</strong> {site.building_type}</Typography>
               <Typography><strong>Size:</strong> {site.size} sq ft</Typography>
+              {assignedSupervisor && (
+                <Typography><strong>Supervisor:</strong> {assignedSupervisor}</Typography>
+              )}
             </div>
           </div>
           {isManager && (
@@ -69,7 +92,7 @@ export default function SiteDetails({ site, onSiteUpdate, isManager }: SiteDetai
                 onClick={() => setIsAssignDialogOpen(true)}
                 variant="outlined"
               >
-                Assign Supervisor
+                {assignedSupervisor ? `Supervisor: ${assignedSupervisor}` : 'Assign Supervisor'}
               </Button>
             </Box>
           )}

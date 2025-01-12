@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CircularProgress, Alert } from '@mui/material';
+import { CircularProgress, Alert, Typography, Paper } from '@mui/material';
 import { supabase } from '../../lib/supabase';
 import { supervisorService } from '../../services/supervisorService';
 import SiteDetails from './sites/SiteDetails';
@@ -60,11 +60,15 @@ export default function SupervisorDashboard() {
 
   return (
     <div className="p-6">
-      <SiteDetails 
-        site={assignedSite}
-        onSiteUpdate={setAssignedSite}
-        isManager={false}
-      />
+      <Paper className="p-4">
+        <Typography variant="h4" gutterBottom>
+          Assigned Site
+        </Typography>
+        <Typography><strong>Name:</strong> {assignedSite.name}</Typography>
+        <Typography><strong>Location:</strong> {assignedSite.location}</Typography>
+        <Typography><strong>Building Type:</strong> {assignedSite.building_type}</Typography>
+        <Typography><strong>Size:</strong> {assignedSite.size} sq ft</Typography>
+      </Paper>
     </div>
   );
 }
