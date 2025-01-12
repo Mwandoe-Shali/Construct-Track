@@ -9,11 +9,19 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Alert
+  Alert,
+  SelectChangeEvent,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { siteAssignmentService } from '../../../services/siteAssignmentService';
 import { userService } from '../../../services/userService';
+
+interface Supervisor {
+  id: string;
+  email: string;
+  full_name?: string;
+  role: string;
+}
 
 interface AssignSupervisorDialogProps {
   open: boolean;
@@ -32,9 +40,15 @@ export function AssignSupervisorDialog({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const { data: supervisors } = useQuery(['supervisors'], () =>
-    userService.getSupervisors()
-  );
+  const { data: supervisors } = useQuery<Supervisor[]>({
+    queryKey: ['supervisors'],
+    queryFn: userService.getSupervisors,
+    initialData: []
+  });
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    setSelectedSupervisor(event.target.value);
+  };
 
   const handleAssign = async () => {
     if (!selectedSupervisor) {
@@ -78,10 +92,10 @@ export function AssignSupervisorDialog({
           <InputLabel>Select Supervisor</InputLabel>
           <Select
             value={selectedSupervisor}
-            onChange={(e) => setSelectedSupervisor(e.target.value)}
+            onChange={handleSelectChange}
             label="Select Supervisor"
           >
-            {supervisors?.map((supervisor) => (
+            {(supervisors || []).map((supervisor) => (
               <MenuItem key={supervisor.id} value={supervisor.id}>
                 {supervisor.full_name || supervisor.email}
               </MenuItem>

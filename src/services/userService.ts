@@ -1,7 +1,14 @@
 import { supabase } from '../lib/supabase';
 
+interface Supervisor {
+  id: string;
+  email: string;
+  full_name?: string;
+  role: string;
+}
+
 export const userService = {
-  async getSupervisors() {
+  async getSupervisors(): Promise<Supervisor[]> {
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
@@ -13,5 +20,5 @@ export const userService = {
     }
 
     return data || [];
-  },
+  }
 };

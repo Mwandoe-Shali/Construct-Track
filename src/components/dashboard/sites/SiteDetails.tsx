@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { Edit, UserPlus } from 'lucide-react';
 import MaterialsList from '../materials/MaterialsList';
-import AssignSupervisorDialog from './AssignSupervisorDialog';
+import { AssignSupervisorDialog } from './AssignSupervisorDialog';
 import { Site } from '../../../types';
 import { supabase } from '../../../lib/supabase';
 
