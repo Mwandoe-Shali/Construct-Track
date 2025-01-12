@@ -32,7 +32,15 @@ export default function SiteDetails({ site, onSiteUpdate, isManager }: SiteDetai
     const fetchAssignedSupervisor = async () => {
       const { data, error } = await supabase
         .from('site_supervisors')
-        .select('profiles(full_name, email)')
+        .select(`
+          user_id,
+          users:user_id (
+            email,
+            profiles:id (
+              full_name
+            )
+          )
+        `)
         .eq('site_id', site.id)
         .single();
 
@@ -40,7 +48,9 @@ export default function SiteDetails({ site, onSiteUpdate, isManager }: SiteDetai
         console.error('Error fetching assigned supervisor:', error);
         setAssignedSupervisor(null);
       } else if (data) {
-        setAssignedSupervisor(data.profiles.full_name || data.profiles.email);
+        const fullName = data.users?.profiles?.full_name;
+        const email = data.users?.email;
+        setAssignedSupervisor(fullName || email || 'Unknown');
       }
     };
 

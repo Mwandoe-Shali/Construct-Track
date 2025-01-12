@@ -1,13 +1,20 @@
 import { supabase } from '../lib/supabase';
-import type { User } from '../types';
+import type { User, Site } from '../types';
+
+interface SupervisorFormData {
+  email: string;
+  full_name: string;
+  contact: string;
+  password: string;
+}
 
 export const supervisorService = {
-  async createSupervisor(email: string) {
+  async createSupervisor(formData: SupervisorFormData) {
     try {
       // First create the auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password: 'Temp@123!', // More secure temporary password
+        email: formData.email,
+        password: formData.password,
         options: {
           data: {
             role: 'supervisor'
@@ -30,7 +37,9 @@ export const supervisorService = {
         .from('profiles')
         .insert({
           id: authData.user.id,
-          email,
+          email: formData.email,
+          full_name: formData.full_name,
+          contact: formData.contact,
           role: 'supervisor'
         })
         .select()
@@ -88,6 +97,26 @@ export const supervisorService = {
     if (error) {
       console.error('Error deleting supervisor:', error);
       throw new Error('Failed to delete supervisor');
+    }
+  },
+
+  async getAssignedSite(userId: string): Promise<Site | null> {
+    try {
+      const { data, error } = await supabase
+        .from('site_supervisors')
+        .select('sites(*)')
+        .eq('user_id', userId)
+        .single();
+
+      if (error) {
+        console.error('Error fetching assigned site:', error);
+        return null;
+      }
+
+      return data?.sites || null;
+    } catch (err) {
+      console.error('Error in getAssignedSite:', err);
+      return null;
     }
   }
 };
