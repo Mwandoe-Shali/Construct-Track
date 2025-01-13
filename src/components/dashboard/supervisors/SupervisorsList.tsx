@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { UserPlus, Edit2, Trash2 } from 'lucide-react';
 import { User } from '../../../types';
-import SupervisorForm from './SupervisorForm';
+import { SupervisorForm } from './SupervisorForm';
 import { useSupervisorManagement } from '../../../hooks/useSupervisorManagement';
 
 export default function SupervisorsList() {
