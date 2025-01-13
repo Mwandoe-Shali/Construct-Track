@@ -29,7 +29,7 @@ export const authService = {
     }
   },
 
-  async signUp(email: string, password: string) {
+  async signUp(email: string, password: string, fullName: string, contact: string) {
     try {
       if (!roles.isValidRoleEmail(email)) {
         throw new Error('Please use your Gmail address with +manager or +supervisor (e.g., your.email+manager@gmail.com)');
@@ -40,7 +40,9 @@ export const authService = {
         password,
         options: {
           data: {
-            role: roles.getRoleFromEmail(email)
+            role: roles.getRoleFromEmail(email),
+            full_name: fullName,
+            contact: contact
           },
           emailRedirectTo: `${window.location.origin}/auth`,
           // Disable email confirmation for development
