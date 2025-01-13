@@ -100,20 +100,19 @@ export const supervisorService = {
     }
   },
 
-  async getAssignedSite(userId: string): Promise<Site | null> {
+  async getAssignedSite(userId: string): Promise<Site[] | null> {
     try {
       const { data, error } = await supabase
         .from('site_supervisors')
         .select('sites(*)')
-        .eq('user_id', userId)
-        .single();
+        .eq('user_id', userId);
 
       if (error) {
         console.error('Error fetching assigned site:', error);
         return null;
       }
 
-      return data?.sites || null;
+      return data || null;
     } catch (err) {
       console.error('Error in getAssignedSite:', err);
       return null;
