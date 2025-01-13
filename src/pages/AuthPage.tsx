@@ -111,6 +111,22 @@ export default function AuthPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <TextField
               fullWidth
+              label="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              disabled={loading}
+              required={!isLogin}
+            />
+            <TextField
+              fullWidth
+              label="Contact"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+              disabled={loading}
+              required={!isLogin}
+            />
+            <TextField
+              fullWidth
               label="Email"
               type="email"
               value={email}
@@ -127,22 +143,6 @@ export default function AuthPage() {
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
               required
-            />
-            <TextField
-              fullWidth
-              label="Full Name"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              disabled={loading}
-              required={!isLogin}
-            />
-            <TextField
-              fullWidth
-              label="Contact"
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-              disabled={loading}
-              required={!isLogin}
             />
             <Button
               type="submit"
