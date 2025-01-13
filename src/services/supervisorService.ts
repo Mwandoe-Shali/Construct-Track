@@ -129,8 +129,8 @@ export const supervisorService = {
         return null;
       }
 
-      // Map the data to extract the sites array
-      return data ? data.map(item => item.sites) : null;
+      // Flatten the array and ensure it matches the Site[] type
+      return data ? data.flatMap(item => item.sites) : null;
     } catch (err) {
       console.error('Error in getAssignedSite:', err);
       return null;

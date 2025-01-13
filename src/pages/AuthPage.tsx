@@ -24,6 +24,8 @@ export default function AuthPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [contact, setContact] = useState('');
 
   const validateForm = () => {
     if (!email || !password) {
@@ -42,6 +44,10 @@ export default function AuthPage() {
       setErrorMessage('Password must be at least 6 characters long');
       return false;
     }
+    if (!isLogin && (!fullName || !contact)) {
+      setErrorMessage('Please fill in all fields');
+      return false;
+    }
     return true;
   };
 
@@ -55,7 +61,7 @@ export default function AuthPage() {
     try {
       const { data, error } = isLogin
         ? await authService.signIn(email, password)
-        : await authService.signUp(email, password);
+        : await authService.signUp(email, password, fullName, contact);
 
       if (error) {
         setErrorMessage(error.message);
@@ -121,6 +127,22 @@ export default function AuthPage() {
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
               required
+            />
+            <TextField
+              fullWidth
+              label="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              disabled={loading}
+              required={!isLogin}
+            />
+            <TextField
+              fullWidth
+              label="Contact"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+              disabled={loading}
+              required={!isLogin}
             />
             <Button
               type="submit"
