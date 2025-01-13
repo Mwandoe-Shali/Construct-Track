@@ -89,13 +89,30 @@ export const supervisorService = {
   },
 
   async deleteSupervisor(id: string) {
-    const { error } = await supabase
-      .from('profiles')
-      .delete()
-      .eq('id', id);
+    try {
+      // Delete related entries in site_supervisors
+      const { error: siteError } = await supabase
+        .from('site_supervisors')
+        .delete()
+        .eq('user_id', id);
 
-    if (error) {
-      console.error('Error deleting supervisor:', error);
+      if (siteError) {
+        console.error('Error deleting related site supervisors:', siteError);
+        throw new Error('Failed to delete related site supervisors');
+      }
+
+      // Delete the supervisor from profiles
+      const { error } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        console.error('Error deleting supervisor:', error);
+        throw new Error('Failed to delete supervisor');
+      }
+    } catch (err) {
+      console.error('Error in deleteSupervisor:', err);
       throw new Error('Failed to delete supervisor');
     }
   },
