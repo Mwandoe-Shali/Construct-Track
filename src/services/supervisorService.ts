@@ -129,7 +129,8 @@ export const supervisorService = {
         return null;
       }
 
-      return data || null;
+      // Map the data to extract the sites array
+      return data ? data.map(item => item.sites) : null;
     } catch (err) {
       console.error('Error in getAssignedSite:', err);
       return null;
