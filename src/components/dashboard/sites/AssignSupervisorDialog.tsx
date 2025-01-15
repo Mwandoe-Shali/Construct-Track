@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -11,7 +11,11 @@ import {
   MenuItem,
   Alert,
   SelectChangeEvent,
+  Box,
+  Typography,
+  IconButton,
 } from '@mui/material';
+import { Edit2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { siteAssignmentService } from '../../../services/siteAssignmentService';
 import { userService } from '../../../services/userService';
@@ -39,12 +43,33 @@ export function AssignSupervisorDialog({
   const [selectedSupervisor, setSelectedSupervisor] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [currentSupervisor, setCurrentSupervisor] = useState<Supervisor | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const { data: supervisors } = useQuery<Supervisor[]>({
     queryKey: ['supervisors'],
     queryFn: userService.getSupervisors,
     initialData: []
   });
+
+  useEffect(() => {
+    const fetchCurrentSupervisor = async () => {
+      try {
+        const { data } = await siteAssignmentService.getCurrentSupervisor(siteId);
+        if (data && data.length > 0) {
+          const supervisor = data[0];
+          setCurrentSupervisor(supervisor);
+          setSelectedSupervisor(supervisor.id);
+        }
+      } catch (err) {
+        console.error('Error fetching current supervisor:', err);
+      }
+    };
+
+    if (open) {
+      fetchCurrentSupervisor();
+    }
+  }, [siteId, open]);
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     setSelectedSupervisor(event.target.value);
@@ -60,13 +85,6 @@ export function AssignSupervisorDialog({
     setError(null);
 
     try {
-      // Check if the assignment already exists
-      const { data: existingAssignment } = await siteAssignmentService.checkAssignment(siteId, selectedSupervisor);
-      if (existingAssignment && existingAssignment.length > 0) {
-        setError('This supervisor is already assigned to this site.');
-        return;
-      }
-
       const success = await siteAssignmentService.assignSupervisor(siteId, selectedSupervisor);
       
       if (success) {
@@ -85,33 +103,53 @@ export function AssignSupervisorDialog({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Assign Supervisor</DialogTitle>
+      <DialogTitle>Site Supervisor</DialogTitle>
       <DialogContent>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        <FormControl fullWidth sx={{ mt: 2 }}>
-          <InputLabel>Select Supervisor</InputLabel>
-          <Select
-            value={selectedSupervisor}
-            onChange={handleSelectChange}
-            label="Select Supervisor"
-          >
-            {(supervisors || []).map((supervisor) => (
-              <MenuItem key={supervisor.id} value={supervisor.id}>
-                {supervisor.full_name || supervisor.email}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        
+        {!isEditing && currentSupervisor && (
+          <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="subtitle1">
+              Current Supervisor: {currentSupervisor.full_name || currentSupervisor.email}
+            </Typography>
+            <IconButton 
+              size="small" 
+              onClick={() => setIsEditing(true)}
+              sx={{ ml: 1 }}
+            >
+              <Edit2 size={16} />
+            </IconButton>
+          </Box>
+        )}
+
+        {(isEditing || !currentSupervisor) && (
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel>Select Supervisor</InputLabel>
+            <Select
+              value={selectedSupervisor}
+              onChange={handleSelectChange}
+              label="Select Supervisor"
+            >
+              {supervisors.map((supervisor) => (
+                <MenuItem key={supervisor.id} value={supervisor.id}>
+                  {supervisor.full_name || supervisor.email}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button
-          onClick={handleAssign}
-          variant="contained"
-          disabled={loading || !selectedSupervisor}
-        >
-          {loading ? 'Assigning...' : 'Assign'}
-        </Button>
+        {(isEditing || !currentSupervisor) && (
+          <Button
+            onClick={handleAssign}
+            variant="contained"
+            disabled={loading || !selectedSupervisor}
+          >
+            {loading ? 'Assigning...' : 'Assign'}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

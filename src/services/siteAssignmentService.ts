@@ -73,5 +73,33 @@ export const siteAssignmentService = {
     }
 
     return data?.site_id;
+  },
+
+  async getCurrentSupervisor(siteId: string) {
+    try {
+      const { data, error } = await supabase
+        .from('site_supervisors')
+        .select(`
+          user_id,
+          profiles:user_id (
+            id,
+            email,
+            full_name,
+            role
+          )
+        `)
+        .eq('site_id', siteId)
+        .single();
+
+      if (error) throw error;
+      
+      return {
+        data: data ? [data.profiles] : [],
+        error: null
+      };
+    } catch (error) {
+      console.error('Error getting current supervisor:', error);
+      return { data: [], error };
+    }
   }
 };
