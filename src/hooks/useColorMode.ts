@@ -1,39 +1,40 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
+import { useMediaQuery } from '@mui/material';
 
 type ColorMode = 'light' | 'dark';
 
 const COLOR_MODE_KEY = 'constructrack-theme';
 
 export function useColorMode() {
-  const [storedMode, setStoredMode] = useLocalStorage<ColorMode>(
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [mode, setMode] = useLocalStorage<ColorMode>(
     COLOR_MODE_KEY,
-    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    prefersDarkMode ? 'dark' : 'light'
   );
-  const [mode, setMode] = useState<ColorMode>(storedMode);
 
   useEffect(() => {
-    setMode(storedMode);
-  }, [storedMode]);
+    // Update theme on system preference change
+    setMode(prefersDarkMode ? 'dark' : 'light');
+  }, [prefersDarkMode, setMode]);
 
-  // Listen for system theme changes
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e: MediaQueryListEvent) => {
-      const newMode = e.matches ? 'dark' : 'light';
-      setMode(newMode);
-      setStoredMode(newMode);
-    };
+    // Apply theme class to document body
+    document.body.classList.remove('light-mode', 'dark-mode');
+    document.body.classList.add(`${mode}-mode`);
+    
+    // Apply theme class to html element for Tailwind dark mode
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(mode);
+    
+    // Update color scheme
+    root.style.colorScheme = mode;
+  }, [mode]);
 
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [setStoredMode]);
-
-  const toggleColorMode = useCallback(() => {
-    const newMode = mode === 'light' ? 'dark' : 'light';
-    setMode(newMode);
-    setStoredMode(newMode);
-  }, [mode, setStoredMode]);
+  const toggleColorMode = () => {
+    setMode(prevMode => prevMode === 'light' ? 'dark' : 'light');
+  };
 
   return { mode, toggleColorMode };
 }
