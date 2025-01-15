@@ -2,29 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --transition-duration: 200ms;
+}
+
 /* Theme transition styles */
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color var(--transition-duration) ease-out,
+              color var(--transition-duration) ease-out,
+              border-color var(--transition-duration) ease-out;
 }
 
 /* Theme-specific styles */
 .light-mode {
   color-scheme: light;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .dark-mode {
   color-scheme: dark;
-}
-
-/* Favicon color styles */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-  }
+  background-color: #121212;
+  color: #ffffff;
 }
