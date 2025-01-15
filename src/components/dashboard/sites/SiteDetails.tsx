@@ -30,28 +30,35 @@ export default function SiteDetails({ site, onSiteUpdate, isManager }: SiteDetai
 
   useEffect(() => {
     const fetchAssignedSupervisor = async () => {
-      const { data, error } = await supabase
-        .from('site_supervisors')
-        .select(`
-          user_id,
-          profiles:user_id!fk_user_id (
-            email,
-            profiles (
-              full_name
+      try {
+        const { data, error } = await supabase
+          .from('site_supervisors')
+          .select(`
+            id,
+            user_id,
+            profiles!site_supervisors_user_id_fkey (
+              full_name,
+              email
             )
-          )
-        `)
-        .eq('site_id', site.id)
-        .single();
+          `)
+          .eq('site_id', site.id)
+          .single();
 
-      if (error) {
-        console.error('Error fetching assigned supervisor:', error);
+        if (error) {
+          console.error('Error fetching assigned supervisor:', error);
+          setAssignedSupervisor(null);
+          return;
+        }
+
+        const supervisorProfile = data?.profiles;
+        setAssignedSupervisor(
+          supervisorProfile?.full_name || 
+          supervisorProfile?.email || 
+          'Unknown'
+        );
+      } catch (err) {
+        console.error('Error:', err);
         setAssignedSupervisor(null);
-      } else if (data) {
-        const user = data.profiles?.[0];
-        const fullName = user?.profiles?.[0]?.full_name;
-        const email = user?.email;
-        setAssignedSupervisor(fullName || email || 'Unknown');
       }
     };
 
