@@ -34,7 +34,7 @@ export default function SiteDetails({ site, onSiteUpdate, isManager }: SiteDetai
         .from('site_supervisors')
         .select(`
           user_id,
-          users:user_id (
+          profiles:user_id!fk_user_id (
             email,
             profiles (
               full_name
@@ -48,7 +48,7 @@ export default function SiteDetails({ site, onSiteUpdate, isManager }: SiteDetai
         console.error('Error fetching assigned supervisor:', error);
         setAssignedSupervisor(null);
       } else if (data) {
-        const user = data.users?.[0];
+        const user = data.profiles?.[0];
         const fullName = user?.profiles?.[0]?.full_name;
         const email = user?.email;
         setAssignedSupervisor(fullName || email || 'Unknown');
