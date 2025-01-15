@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { CircularProgress, Alert, Typography, Paper } from '@mui/material';
+import { CircularProgress, Alert, Typography, Paper, Grid } from '@mui/material';
 import { supabase } from '../../lib/supabase';
 import { supervisorService } from '../../services/supervisorService';
-import SiteDetails from './sites/SiteDetails';
+import MaterialsList from './materials/MaterialsList';
 import type { Site } from '../../types';
 
 export default function SupervisorDashboard() {
@@ -60,15 +60,37 @@ export default function SupervisorDashboard() {
 
   return (
     <div className="p-6">
-      <Paper className="p-4">
-        <Typography variant="h4" gutterBottom>
-          Assigned Site
-        </Typography>
-        <Typography><strong>Name:</strong> {assignedSite.name}</Typography>
-        <Typography><strong>Location:</strong> {assignedSite.location}</Typography>
-        <Typography><strong>Building Type:</strong> {assignedSite.building_type}</Typography>
-        <Typography><strong>Size:</strong> {assignedSite.size} sq ft</Typography>
-      </Paper>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Paper className="p-6">
+            <Typography variant="h4" gutterBottom color="primary">
+              {assignedSite.name}
+            </Typography>
+            <Grid container spacing={3} className="mb-6">
+              <Grid item xs={12} md={4}>
+                <Typography variant="subtitle1" color="textSecondary">Location</Typography>
+                <Typography variant="body1">{assignedSite.location}</Typography>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Typography variant="subtitle1" color="textSecondary">Building Type</Typography>
+                <Typography variant="body1">{assignedSite.building_type}</Typography>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Typography variant="subtitle1" color="textSecondary">Size</Typography>
+                <Typography variant="body1">{assignedSite.size} sq ft</Typography>
+              </Grid>
+            </Grid>
+
+            <Typography variant="h5" gutterBottom className="mt-8 mb-4">
+              Site Materials
+            </Typography>
+            <MaterialsList 
+              siteId={assignedSite.id} 
+              isManager={false} 
+            />
+          </Paper>
+        </Grid>
+      </Grid>
     </div>
   );
 }
