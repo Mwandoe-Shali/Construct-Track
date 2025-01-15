@@ -12,15 +12,9 @@ export function useColorMode() {
   );
   const [mode, setMode] = useState<ColorMode>(storedMode);
 
-  // Apply theme immediately when mode changes
   useEffect(() => {
-    document.documentElement.style.setProperty('color-scheme', mode);
-    document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(mode);
-    
-    // Force immediate re-render of MUI components
-    window.dispatchEvent(new Event('storage'));
-  }, [mode]);
+    setMode(storedMode);
+  }, [storedMode]);
 
   // Listen for system theme changes
   useEffect(() => {
