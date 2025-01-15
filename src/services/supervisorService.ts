@@ -117,20 +117,23 @@ export const supervisorService = {
     }
   },
 
-  async getAssignedSite(userId: string): Promise<Site[] | null> {
+  async getAssignedSite(userId: string): Promise<Site | null> {
     try {
       const { data, error } = await supabase
         .from('site_supervisors')
-        .select('sites(*)')
-        .eq('user_id', userId);
+        .select(`
+          site_id,
+          sites (*)
+        `)
+        .eq('user_id', userId)
+        .single();
 
       if (error) {
         console.error('Error fetching assigned site:', error);
         return null;
       }
 
-      // Flatten the array and ensure it matches the Site[] type
-      return data ? data.flatMap(item => item.sites) : null;
+      return data?.sites || null;
     } catch (err) {
       console.error('Error in getAssignedSite:', err);
       return null;
