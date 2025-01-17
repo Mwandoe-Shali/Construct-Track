@@ -13,15 +13,31 @@
               border-color var(--transition-duration) ease-out;
 }
 
-/* Theme-specific styles */
-.light-mode {
+/* Light mode styles */
+:root[class="light"] {
   color-scheme: light;
-  background-color: #ffffff;
-  color: #000000;
+  --bg-primary: #ffffff;
+  --text-primary: #000000;
+}
+
+/* Dark mode styles */
+:root[class="dark"] {
+  color-scheme: dark;
+  --bg-primary: #121212;
+  --text-primary: #ffffff;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.light-mode {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .dark-mode {
-  color-scheme: dark;
-  background-color: #121212;
-  color: #ffffff;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }

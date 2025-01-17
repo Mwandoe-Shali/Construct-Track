@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useColorMode } from '../hooks/useColorMode';
@@ -10,28 +10,24 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const { mode } = useColorMode();
-
-  const theme = useMemo(() => createAppTheme(mode), [mode]);
+  const theme = createAppTheme(mode);
 
   useEffect(() => {
-    const root = document.documentElement;
-    const body = document.body;
-
-    // Remove existing classes
-    root.classList.remove('light', 'dark');
-    body.classList.remove('light-mode', 'dark-mode');
-
-    // Add new classes
-    root.classList.add(mode);
-    body.classList.add(`${mode}-mode`);
+    // Apply theme mode to root element
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(mode);
     
-    // Update color scheme
-    root.style.colorScheme = mode;
+    // Apply theme mode to body
+    document.body.classList.remove('light-mode', 'dark-mode');
+    document.body.classList.add(`${mode}-mode`);
+    
+    // Set color-scheme
+    document.documentElement.style.colorScheme = mode;
   }, [mode]);
 
   return (
     <MuiThemeProvider theme={theme}>
-      <CssBaseline />
+      <CssBaseline enableColorScheme />
       {children}
     </MuiThemeProvider>
   );
