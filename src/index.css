@@ -18,6 +18,8 @@
   color-scheme: light;
   --bg-primary: #ffffff;
   --text-primary: #000000;
+  --navbar-bg: #1976d2;
+  --paper-bg: #ffffff;
 }
 
 /* Dark mode styles */
@@ -25,6 +27,8 @@
   color-scheme: dark;
   --bg-primary: #121212;
   --text-primary: #ffffff;
+  --navbar-bg: #1e1e1e;
+  --paper-bg: #242424;
 }
 
 body {
@@ -32,12 +36,19 @@ body {
   color: var(--text-primary);
 }
 
-.light-mode {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+.MuiAppBar-root {
+  background-color: var(--navbar-bg) !important;
 }
 
-.dark-mode {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+.MuiPaper-root {
+  background-color: var(--paper-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Add transition for Material-UI components */
+.MuiAppBar-root,
+.MuiPaper-root,
+.MuiButton-root,
+.MuiIconButton-root {
+  transition: all var(--transition-duration) ease-out !important;
 }

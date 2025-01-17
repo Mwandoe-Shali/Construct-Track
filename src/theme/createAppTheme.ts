@@ -5,37 +5,20 @@ export function createAppTheme(mode: 'light' | 'dark'): Theme {
   return createTheme({
     palette: {
       mode,
-      ...(mode === 'light' 
-        ? {
-            primary: {
-              main: colors.sepia[700],
-              light: colors.sepia[500],
-              dark: colors.sepia[800],
-            },
-            background: {
-              default: colors.sepia[50],
-              paper: '#FFFFFF',
-            },
-            text: {
-              primary: colors.sepia[900],
-              secondary: colors.sepia[800],
-            },
-          }
-        : {
-            primary: {
-              main: colors.sepia[400],
-            },
-            background: {
-              default: colors.dark.background,
-              paper: colors.dark.paper,
-            },
-            divider: colors.dark.border,
-          }),
+      primary: {
+        main: mode === 'light' ? '#1976d2' : '#90caf9',
+      },
+      background: {
+        default: mode === 'light' ? '#ffffff' : '#121212',
+        paper: mode === 'light' ? '#ffffff' : '#242424',
+      },
     },
     components: {
       MuiCssBaseline: {
         styleOverrides: {
           body: {
+            backgroundColor: mode === 'light' ? '#ffffff' : '#121212',
+            color: mode === 'light' ? '#000000' : '#ffffff',
             transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out',
           },
         },
@@ -43,6 +26,7 @@ export function createAppTheme(mode: 'light' | 'dark'): Theme {
       MuiPaper: {
         styleOverrides: {
           root: {
+            backgroundColor: mode === 'light' ? '#ffffff' : '#242424',
             transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
           },
         },
@@ -50,7 +34,7 @@ export function createAppTheme(mode: 'light' | 'dark'): Theme {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === 'light' ? colors.sepia[700] : colors.dark.paper,
+            backgroundColor: mode === 'light' ? '#1976d2' : '#1e1e1e',
             transition: 'background-color 0.2s ease-in-out',
           },
         },
