@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -21,6 +21,40 @@ export default function SupervisorsList() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedSupervisor, setSelectedSupervisor] = useState<User | null>(null);
   const { supervisors, loading, deleteSupervisor } = useSupervisorManagement();
+  const [supervisorSites, setSupervisorSites] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const fetchSupervisorSites = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_supervisors')
+          .select(`
+            user_id,
+            sites (
+              id,
+              name
+            )
+          `);
+
+        if (error) {
+          console.error('Error fetching supervisor sites:', error);
+          return;
+        }
+
+        const siteMap: Record<string, string> = {};
+        data?.forEach(item => {
+          if (item.sites) {
+            siteMap[item.user_id] = item.sites.name;
+          }
+        });
+        setSupervisorSites(siteMap);
+      } catch (err) {
+        console.error('Error:', err);
+      }
+    };
+
+    fetchSupervisorSites();
+  }, []);
 
   const handleEdit = (supervisor: User) => {
     setSelectedSupervisor(supervisor);
@@ -53,7 +87,7 @@ export default function SupervisorsList() {
             {supervisors.map((supervisor) => (
               <TableRow key={supervisor.id}>
                 <TableCell>{supervisor.email}</TableCell>
-                <TableCell>{supervisor.site_id || 'Not assigned'}</TableCell>
+                <TableCell>{supervisorSites[supervisor.id] || 'Not assigned'}</TableCell>
                 <TableCell align="right">
                   <Tooltip title="Edit Supervisor">
                     <IconButton onClick={() => handleEdit(supervisor)}>
