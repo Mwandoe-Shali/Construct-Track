@@ -16,6 +16,7 @@ import { UserPlus, Edit2, Trash2 } from 'lucide-react';
 import { User } from '../../../types';
 import { SupervisorForm } from './SupervisorForm';
 import { useSupervisorManagement } from '../../../hooks/useSupervisorManagement';
+import { supabase } from '../../../lib/supabase';
 
 export default function SupervisorsList() {
   const [isFormOpen, setIsFormOpen] = useState(false);
