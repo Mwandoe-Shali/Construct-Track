@@ -13,22 +13,30 @@
               border-color var(--transition-duration) ease-out;
 }
 
-/* Light mode styles */
+/* Light mode styles - Blue, Sepia, Golden */
 :root[class="light"] {
   color-scheme: light;
-  --bg-primary: #ffffff;
-  --text-primary: #000000;
-  --navbar-bg: #1976d2;
+  --bg-primary: #f8f4e9; /* Soft sepia background */
+  --text-primary: #2c4b77; /* Deep blue text */
+  --navbar-bg: #1e3a8a; /* Navy blue navbar */
   --paper-bg: #ffffff;
+  --accent-primary: #c19b4e; /* Golden accent */
+  --accent-secondary: #8b6d3c; /* Darker golden */
+  --border-color: #d4c4a5; /* Sepia border */
+  --hover-bg: #eae0cc; /* Light sepia hover */
 }
 
-/* Dark mode styles */
+/* Dark mode styles - Grey Scale */
 :root[class="dark"] {
   color-scheme: dark;
-  --bg-primary: #121212;
-  --text-primary: #ffffff;
-  --navbar-bg: #1e1e1e;
-  --paper-bg: #242424;
+  --bg-primary: #121212; /* Dark grey background */
+  --text-primary: #e0e0e0; /* Light grey text */
+  --navbar-bg: #1a1a1a; /* Slightly lighter dark grey */
+  --paper-bg: #242424; /* Mid dark grey */
+  --accent-primary: #757575; /* Mid grey accent */
+  --accent-secondary: #616161; /* Darker grey */
+  --border-color: #404040; /* Border grey */
+  --hover-bg: #2d2d2d; /* Hover grey */
 }
 
 body {
@@ -43,6 +51,21 @@ body {
 .MuiPaper-root {
   background-color: var(--paper-bg) !important;
   color: var(--text-primary) !important;
+  border: 1px solid var(--border-color);
+}
+
+.MuiButton-contained {
+  background-color: var(--accent-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.MuiButton-outlined {
+  border-color: var(--accent-primary) !important;
+  color: var(--accent-primary) !important;
+}
+
+.MuiButton-root:hover {
+  background-color: var(--hover-bg) !important;
 }
 
 /* Add transition for Material-UI components */
@@ -51,4 +74,13 @@ body {
 .MuiButton-root,
 .MuiIconButton-root {
   transition: all var(--transition-duration) ease-out !important;
+}
+
+/* Custom styles for links and interactive elements */
+a {
+  color: var(--accent-primary);
+}
+
+a:hover {
+  color: var(--accent-secondary);
 }
