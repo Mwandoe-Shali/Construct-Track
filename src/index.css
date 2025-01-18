@@ -29,17 +29,20 @@
   --hover-bg: #eae0cc; /* Light sepia hover */
 }
 
-/* Dark mode styles - Grey Scale */
+/* Dark mode styles - Grey Scale with Golden Accents */
 :root[class="dark"] {
   color-scheme: dark;
   --bg-primary: #121212; /* Dark grey background */
   --text-primary: #e0e0e0; /* Light grey text */
   --navbar-bg: #1a1a1a; /* Slightly lighter dark grey */
   --paper-bg: #242424; /* Mid dark grey */
-  --accent-primary: #757575; /* Mid grey accent */
-  --accent-secondary: #616161; /* Darker grey */
+  --table-header-bg: #2d2d2d; /* Dark grey for table header */
+  --table-row-bg: #1e1e1e; /* Darker grey for table rows */
+  --table-text: #d4b675; /* Golden text for better visibility */
+  --accent-primary: #c19b4e; /* Golden accent */
+  --accent-secondary: #b38d3e; /* Darker golden */
   --border-color: #404040; /* Border grey */
-  --hover-bg: #2d2d2d; /* Hover grey */
+  --hover-bg: #333333; /* Hover grey */
 }
 
 body {
@@ -64,7 +67,7 @@ body {
 
 .MuiButton-outlined {
   border-color: var(--accent-primary) !important;
-  color: var(--accent-primary) !important;
+  color: var (--accent-primary) !important;
 }
 
 .MuiButton-root:hover {
@@ -105,5 +108,25 @@ a:hover {
 }
 
 .MuiTableRow-root:hover {
+  background-color: var(--hover-bg) !important;
+}
+
+/* Add these table styles after your existing table styles */
+.dark .MuiTableHead-root .MuiTableCell-root {
+  background-color: var(--table-header-bg) !important;
+  color: var(--accent-primary) !important;
+  font-weight: 600;
+}
+
+.dark .MuiTableBody-root .MuiTableRow-root {
+  background-color: var(--table-row-bg) !important;
+}
+
+.dark .MuiTableCell-root {
+  color: var(--table-text) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark .MuiTableRow-root:hover {
   background-color: var(--hover-bg) !important;
 }
