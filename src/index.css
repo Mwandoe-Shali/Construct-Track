@@ -32,22 +32,38 @@
 /* Dark mode styles - Grey Scale with Golden Accents */
 :root[class="dark"] {
   color-scheme: dark;
-  --bg-primary: #121212; /* Dark grey background */
+  --bg-primary: #1a1a1a; /* Lighter grey for main background */
   --text-primary: #e0e0e0; /* Light grey text */
-  --navbar-bg: #1a1a1a; /* Slightly lighter dark grey */
-  --paper-bg: #242424; /* Mid dark grey */
-  --table-header-bg: #2d2d2d; /* Dark grey for table header */
-  --table-row-bg: #1e1e1e; /* Darker grey for table rows */
+  --navbar-bg: #2d2d2d; /* Slightly darker grey for navbar */
+  --paper-bg: #333333; /* Mid grey for paper components */
+  --table-header-bg: #404040; /* Dark grey for table header */
+  --table-row-bg: #2d2d2d; /* Darker grey for table rows */
   --table-text: #d4b675; /* Golden text for better visibility */
   --accent-primary: #c19b4e; /* Golden accent */
   --accent-secondary: #b38d3e; /* Darker golden */
-  --border-color: #404040; /* Border grey */
-  --hover-bg: #333333; /* Hover grey */
+  --border-color: #4a4a4a; /* Border grey */
+  --hover-bg: #404040; /* Hover grey */
+}
+
+html {
+  background-color: var(--bg-primary);
 }
 
 body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  min-height: 100vh;
+  margin: 0;
+}
+
+main {
   background-color: var(--bg-primary);
-  color: var(--text-primary);
+  min-height: calc(100vh - 64px); /* Subtract AppBar height */
+}
+
+#root {
+  background-color: var(--bg-primary);
+  min-height: 100vh;
 }
 
 .MuiAppBar-root {
