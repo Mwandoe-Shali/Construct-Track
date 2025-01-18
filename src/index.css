@@ -18,9 +18,12 @@
   color-scheme: light;
   --bg-primary: #f8f4e9; /* Soft sepia background */
   --text-primary: #2c4b77; /* Deep blue text */
-  --navbar-bg: #1e3a8a; /* Navy blue navbar */
-  --paper-bg: #ffffff;
-  --accent-primary: #c19b4e; /* Golden accent */
+  --navbar-bg: #c19b4e; /* Golden navbar */
+  --paper-bg: #fcf9f5; /* Light sepia paper */
+  --table-header-bg: #e6d4b1; /* Sepia table header */
+  --table-row-bg: #fff9f0; /* Very light sepia for table rows */
+  --table-text: #4a4a4a; /* Dark grey text for better contrast */
+  --accent-primary: #b38d3e; /* Golden accent */
   --accent-secondary: #8b6d3c; /* Darker golden */
   --border-color: #d4c4a5; /* Sepia border */
   --hover-bg: #eae0cc; /* Light sepia hover */
@@ -83,4 +86,24 @@ a {
 
 a:hover {
   color: var(--accent-secondary);
+}
+
+/* Add these new styles for table components */
+.MuiTableHead-root .MuiTableCell-root {
+  background-color: var(--table-header-bg) !important;
+  color: var(--text-primary) !important;
+  font-weight: 600;
+}
+
+.MuiTableBody-root .MuiTableRow-root {
+  background-color: var(--table-row-bg) !important;
+}
+
+.MuiTableCell-root {
+  color: var(--table-text) !important;
+  border-color: var(--border-color) !important;
+}
+
+.MuiTableRow-root:hover {
+  background-color: var(--hover-bg) !important;
 }
