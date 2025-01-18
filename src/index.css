@@ -230,3 +230,47 @@ a:hover {
   color: var(--location-text) !important;
   opacity: 0.9;
 }
+
+/* Light theme form styles */
+.light .MuiTextField-root label {
+  color: #2c4b77 !important; /* Deep blue text */
+}
+
+.light .MuiTextField-root input,
+.light .MuiTextField-root textarea {
+  color: #4a5d82 !important; /* Lighter blue for input text */
+}
+
+.light .MuiTextField-root .MuiOutlinedInput-root fieldset {
+  border-color: #d4c4a5 !important; /* Sepia border */
+}
+
+.light .MuiTextField-root:hover .MuiOutlinedInput-root fieldset {
+  border-color: #c19b4e !important; /* Golden border on hover */
+}
+
+/* Contact page specific styles */
+.light .contact-form .MuiTypography-root {
+  color: #2c4b77 !important; /* Deep blue text */
+}
+
+.light .contact-info .MuiTypography-root {
+  color: #4a5d82 !important; /* Lighter blue text */
+}
+
+/* Auth page specific styles */
+.light .auth-form .MuiTypography-h5,
+.light .auth-form .MuiTypography-body1 {
+  color: #2c4b77 !important; /* Deep blue text */
+}
+
+.light .auth-form .MuiTypography-body2 {
+  color: #4a5d82 !important; /* Lighter blue for secondary text */
+}
+
+.light .auth-form code {
+  background-color: #f0e6d2; /* Light sepia background for code */
+  color: #8b6d3c; /* Darker golden for code text */
+  padding: 2px 4px;
+  border-radius: 4px;
+}
