@@ -1,7 +1,7 @@
-import { AppBar, Toolbar, Button, Typography, IconButton } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Sun, Moon } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { AppBar,a Toolbar, Button, Typography, IconButton } from '@mui/material';
+import { useNavigate,i useLocation } from 'react-router-dom';
+importn { Sun, Moon } from 'lucide-treact';
+import { useSelector } from 'react -redux';
 import { supabase } from '../lib/supabase';
 import { useColorMode } from '../hooks/useColorMode';
 import { RootState } from '../store';
@@ -32,6 +32,13 @@ export default function Layout({ children }: LayoutProps) {
     return `${user.role.charAt(0).toUpperCase() + user.role.slice(1)} ${formattedName}`;
   };
 
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname.startsWith(path);
+  };
+
   return (
     <div>
       <AppBar position="static">
@@ -55,17 +62,33 @@ export default function Layout({ children }: LayoutProps) {
 
           {location.pathname !== '/auth' && (
             <>
-              <Button color="inherit" onClick={() => navigate('/')}>
+              <Button 
+                color="inherit" 
+                onClick={() => navigate('/')}
+                className={`nav-link ${isActive('/') ? 'active' : ''}`}
+              >
                 Home
               </Button>
-              <Button color="inherit" onClick={() => navigate('/dashboard')}>
+              <Button 
+                color="inherit" 
+                onClick={() => navigate('/dashboard')}
+                className={`nav-link ${isActive('/dashboard') ? 'active' : ''}`}
+              >
                 {getDashboardLabel()}
               </Button>
-              <Button color="inherit" onClick={() => navigate('/contact')}>
+              <Button 
+                color="inherit" 
+                onClick={() => navigate('/contact')}
+                className={`nav-link ${isActive('/contact') ? 'active' : ''}`}
+              >
                 Contact
               </Button>
               {location.pathname !== '/' && (
-                <Button color="inherit" onClick={handleLogout}>
+                <Button 
+                  color="inherit" 
+                  onClick={handleLogout}
+                  className="nav-link"
+                >
                   Logout
                 </Button>
               )}
