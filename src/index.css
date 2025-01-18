@@ -111,22 +111,42 @@ a:hover {
   background-color: var(--hover-bg) !important;
 }
 
-/* Add these table styles after your existing table styles */
+/* Light mode table styles */
+.light .MuiTableHead-root .MuiTableCell-root {
+  background-color: #e6d4b1 !important; /* Sepia table header */
+  color: #2c4b77 !important; /* Deep blue text */
+  font-weight: 600;
+}
+
+.light .MuiTableBody-root .MuiTableRow-root {
+  background-color: #fff9f0 !important; /* Very light sepia background */
+}
+
+.light .MuiTableCell-root {
+  color: #4a4a4a !important; /* Dark grey text */
+  border-color: #d4c4a5 !important; /* Sepia border */
+}
+
+.light .MuiTableRow-root:hover {
+  background-color: #eae0cc !important; /* Light sepia hover */
+}
+
+/* Dark mode table styles */
 .dark .MuiTableHead-root .MuiTableCell-root {
-  background-color: var(--table-header-bg) !important;
-  color: var(--accent-primary) !important;
+  background-color: #2d2d2d !important; /* Dark grey header */
+  color: #c19b4e !important; /* Golden text */
   font-weight: 600;
 }
 
 .dark .MuiTableBody-root .MuiTableRow-root {
-  background-color: var(--table-row-bg) !important;
+  background-color: #1e1e1e !important; /* Darker grey background */
 }
 
 .dark .MuiTableCell-root {
-  color: var(--table-text) !important;
-  border-color: var(--border-color) !important;
+  color: #d4b675 !important; /* Golden text */
+  border-color: #404040 !important; /* Border grey */
 }
 
 .dark .MuiTableRow-root:hover {
-  background-color: var(--hover-bg) !important;
+  background-color: #333333 !important; /* Hover grey */
 }
