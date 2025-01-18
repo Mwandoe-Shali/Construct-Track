@@ -274,3 +274,49 @@ a:hover {
   padding: 2px 4px;
   border-radius: 4px;
 }
+
+/* Dark theme contact page styles */
+.dark .contact-form .MuiTypography-root,
+.dark .contact-info .MuiTypography-root {
+  color: #d4b675 !important; /* Golden text from project theme */
+}
+
+.dark .contact-form .MuiTextField-root label {
+  color: #90caf9 !important; /* Light blue for labels */
+}
+
+.dark .contact-form .MuiTextField-root input,
+.dark .contact-form .MuiTextField-root textarea {
+  color: #e0e0e0 !important; /* Light grey for input text */
+}
+
+/* Dark theme supervisor dashboard label styles */
+.dark .MuiTypography-subtitle1 {
+  color: #90caf9 !important; /* Light blue for labels */
+}
+
+/* Dark theme contact page background */
+.dark .min-h-screen.bg-gray-50 {
+  background-color: #1a1a1a !important; /* Match dashboard dark theme */
+}
+
+.dark .contact-form .MuiPaper-root {
+  background-color: #2d2d2d !important; /* Darker grey for paper components */
+}
+
+/* Ensure form inputs are visible in dark mode */
+.dark .contact-form .MuiInputBase-root {
+  color: #e0e0e0 !important;
+}
+
+.dark .contact-form .MuiInputLabel-root {
+  color: #90caf9 !important;
+}
+
+.dark .contact-form .MuiOutlinedInput-notchedOutline {
+  border-color: #404040 !important;
+}
+
+.dark .contact-form .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #c19b4e !important; /* Golden accent on hover */
+}

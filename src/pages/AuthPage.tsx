@@ -108,7 +108,7 @@ export default function AuthPage() {
             </Alert>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 auth-form">
             {!isLogin && (
               <>
                 <TextField

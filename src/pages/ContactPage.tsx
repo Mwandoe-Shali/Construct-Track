@@ -31,7 +31,7 @@ export default function ContactPage() {
           <div className="space-y-4 mt-8">
             <div className="flex items-center space-x-3">
               <Mail className="text-blue-600" />
-              <Typography>support@construct-track.com</Typography>
+              <Typography>support@construc-track.com</Typography>
             </div>
             <div className="flex items-center space-x-3">
               <Phone className="text-blue-600" />
@@ -52,32 +52,34 @@ export default function ContactPage() {
               </Alert>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <TextField
-                  fullWidth
-                  label="Name"
-                  required
-                />
-                <TextField
-                  fullWidth
-                  label="Email"
-                  type="email"
-                  required
-                />
-                <TextField
-                  fullWidth
-                  label="Message"
-                  multiline
-                  rows={4}
-                  required
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                >
-                  Send Message
-                </Button>
+                <div className="contact-form">
+                  <TextField
+                    fullWidth
+                    label="Name"
+                    required
+                  />
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    type="email"
+                    required
+                  />
+                  <TextField
+                    fullWidth
+                    label="Message"
+                    multiline
+                    rows={4}
+                    required
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    size="large"
+                  >
+                    Send Message
+                  </Button>
+                </div>
               </form>
             )}
           </CardContent>
