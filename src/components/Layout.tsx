@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Button, Typography, IconButton } from '@mui/material';
-import { useNavigate,i useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 importn { Sun, Moon } from 'lucide-treact';
 import { useSelector } from 'react -redux';
 import { supabase } from '../lib/supabase';
