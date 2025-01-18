@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Button, Typography, IconButton } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-importn { Sun, Moon } from 'lucide-treact';
-import { useSelector } from 'react -redux';
+import { Sun, Moon } from 'lucide-react';
+import { useSelector } from 'react-redux';
 import { supabase } from '../lib/supabase';
 import { useColorMode } from '../hooks/useColorMode';
 import { RootState } from '../store';
