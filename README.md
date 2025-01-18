@@ -29,23 +29,27 @@ This project marks the culmination of 12 continuous months of learning and speci
 ## Technologies Used
 
 ### Frontend
-- React 18 with TypeScript
-- Material-UI (MUI) for components
-- Redux Toolkit for state management
-- React Query for server state
-- Tailwind CSS for utility styles
+- ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+
+- ![MUI](https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white) - For UI components
+
+- ![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white) - For State Management
+
+- ![React Query](https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=react-query&logoColor=white) - For Server state
+
+- ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) - For utility styles
 
 ### Backend
-- Supabase for:
-  - Authentication
-  - Database (PostgreSQL)
-  - Row Level Security (RLS)
-  - Real-time subscriptions
+- ![Supabase](https://img.shields.io/badge/Supabase-181818?style=for-the-badge&logo=supabase&logoColor=3ECF8E) - For authenication, Row Level Security (RLS), and Real-time subscriptions
 
-### Development Tools
-- Vite for fast development and building
-- ESLint for code quality
-- Vitest for testing
+- ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white) - For database
+
+### Testing & Development Tools
+- ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white) - For fast development and building
+
+- ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white) - For code quality
+
+- ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white) -For testing
 
 ## Project Structure
 ```
