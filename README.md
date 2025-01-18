@@ -158,18 +158,18 @@ npm run dev
 
 
 ## Contributing
-Fork the repository
-Create a feature branch
-Commit your changes
-Push to the branch
-Create a Pull Request
+1.  Fork the repository
+2.  Create a feature branch
+3.  Commit your changes
+4.  Push to the branch
+5.  Create a Pull Request
 
 
 
 
 ## Conclusion
 
-This specialization project is a testament to my dedication and hard work over the past year. I am excited to continue my journey in the tech industry and apply the skills I have acquired to real-world challenges.
+> This specialization project is a testament to my dedication and hard work over the past year. I am excited to continue my journey in the tech industry and apply the skills I have acquired to real-world challenges.
 
 ## Contact
 For any inquiries or collaboration opportunities, feel free to reach out to me at [mwandoeshali@gmail.com](mailto:mwandoeshali@gmail.com).
