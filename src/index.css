@@ -18,6 +18,7 @@
   color-scheme: light;
   --bg-primary: #f8f4e9; /* Soft sepia background */
   --text-primary: #2c4b77; /* Deep blue text */
+  --text-secondary: #4a5d82; /* Lighter blue for secondary text */
   --navbar-bg: #c19b4e; /* Golden navbar */
   --paper-bg: #fcf9f5; /* Light sepia paper */
   --table-header-bg: #e6d4b1; /* Sepia table header */
@@ -27,6 +28,7 @@
   --accent-secondary: #8b6d3c; /* Darker golden */
   --border-color: #d4c4a5; /* Sepia border */
   --hover-bg: #eae0cc; /* Light sepia hover */
+  --location-text: #5b6b95; /* Blue-tinted text for location */
 }
 
 /* Dark mode styles - Grey Scale with Golden Accents */
@@ -177,7 +179,8 @@ a:hover {
 
 /* Light theme active styles */
 .light .nav-link.active {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(193, 155, 78, 0.15); /* Subtle golden background */
+  color: #c19b4e !important; /* Golden text */
 }
 
 .light .nav-link::after {
@@ -187,13 +190,18 @@ a:hover {
   left: 8px;
   right: 8px;
   height: 2px;
-  background-color: #fff;
+  background-color: #2c4b77; /* Deep blue underline */
   transform: scaleX(0);
   transition: transform var(--transition-duration) ease-out;
 }
 
 .light .nav-link.active::after {
   transform: scaleX(1);
+}
+
+/* Light theme hover effects */
+.light .nav-link:hover {
+  background-color: rgba(193, 155, 78, 0.1); /* Even more subtle golden on hover */
 }
 
 /* Dark theme active styles */
@@ -215,4 +223,10 @@ a:hover {
 
 .dark .nav-link.active::after {
   transform: scaleX(1);
+}
+
+/* Update site list location text color */
+.light .MuiListItemText-secondary {
+  color: var(--location-text) !important;
+  opacity: 0.9;
 }
