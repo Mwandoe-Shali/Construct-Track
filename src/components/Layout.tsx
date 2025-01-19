@@ -81,7 +81,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={() => navigate('/contact')}
                 className={`nav-link ${isActive('/contact') ? 'active' : ''}`}
               >
-                Contact
+                Contact Us
               </Button>
               {location.pathname !== '/' && (
                 <Button 
