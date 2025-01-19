@@ -9,7 +9,7 @@
 /* Theme transition styles */
 * {
   transition: background-color var(--transition-duration) ease-out,
-              color var(--transition-duration) ease-out,
+              color var (--transition-duration) ease-out,
               border-color var(--transition-duration) ease-out;
 }
 
@@ -200,6 +200,39 @@ a:hover {
 
 .dark .MuiTableRow-root:hover {
   background-color: #333333 !important; /* Hover grey */
+}
+
+/* Dark theme action icons and location text styles */
+.dark .MuiTableCell-root .MuiIconButton-root {
+  color: #c19b4e !important; /* Golden color for table action icons */
+}
+
+.dark .MuiTableCell-root .MuiIconButton-root:hover {
+  color: #d4b675 !important; /* Lighter golden on hover */
+  background-color: rgba(193, 155, 78, 0.1) !important; /* Subtle golden background on hover */
+}
+
+/* Dark theme sites list delete button */
+.dark .MuiListItem-root .MuiIconButton-root {
+  color: #c19b4e !important; /* Golden color for list delete icon */
+}
+
+.dark .MuiListItem-root .MuiIconButton-root:hover {
+  color: #d4b675 !important; /* Lighter golden on hover */
+  background-color: rgba(193, 155, 78, 0.1) !important;
+}
+
+/* Location text in both dashboards */
+.dark .MuiListItemText-secondary,
+.dark .MuiTypography-subtitle1 {
+  color: #d4b675 !important; /* Lighter golden for location text */
+}
+
+/* Ensure icon stroke consistency */
+.dark .lucide-trash-2,
+.dark .lucide-edit-2 {
+  stroke: currentColor;
+  stroke-width: 2px;
 }
 
 /* Navbar active link styles */
