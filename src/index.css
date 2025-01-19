@@ -149,6 +149,39 @@ a:hover {
   background-color: #eae0cc !important; /* Light sepia hover */
 }
 
+/* Light theme action icons styles */
+.light .MuiTableCell-root .MuiIconButton-root {
+  color: #2c4b77 !important; /* Deep blue color for icons */
+}
+
+.light .MuiTableCell-root .MuiIconButton-root:hover {
+  color: #1e3a8a !important; /* Darker blue on hover */
+  background-color: rgba(44, 75, 119, 0.1) !important; /* Subtle blue background on hover */
+}
+
+/* Keep edit and delete icons consistent with theme */
+.light .MuiTableCell-root .lucide-edit-2,
+.light .MuiTableCell-root .lucide-trash-2 {
+  stroke: currentColor;
+  stroke-width: 2px;
+}
+
+/* Light theme sites list delete icon styles */
+.light .MuiListItem-root .MuiIconButton-root {
+  color: #2c4b77 !important; /* Deep blue color matching other icons */
+}
+
+.light .MuiListItem-root .MuiIconButton-root:hover {
+  color: #1e3a8a !important; /* Darker blue on hover */
+  background-color: rgba(44, 75, 119, 0.1) !important; /* Subtle blue background on hover */
+}
+
+/* Keep delete icon consistent with theme */
+.light .MuiListItem-root .lucide-trash-2 {
+  stroke: currentColor;
+  stroke-width: 2px;
+}
+
 /* Dark mode table styles */
 .dark .MuiTableHead-root .MuiTableCell-root {
   background-color: #2d2d2d !important; /* Dark grey header */
